@@ -16,6 +16,15 @@ contract ZombieOwner {
 	function transfer(address _to, uint256 _tokenId) public {
 		zombieOwnership.transfer(_to, _tokenId);
 	}
+	
+	function approve(address _to, uint256 _tokenId) public {
+		zombieOwnership.approve(_to, _tokenId);
+	}
+
+	function takeOwnership(uint256 _tokenId) public {
+		zombieOwnership.takeOwnership(_tokenId);
+	}
+
 }
 
 contract ZombieOwnershipTest is DSTest {
@@ -56,7 +65,25 @@ contract ZombieOwnershipTest is DSTest {
 		assert(zombieOwnership.balanceOf(owner2) == 2);
 		assert(zombieOwnership.ownerOf(0) == address(owner2));
 		assert(zombieOwnership.ownerOf(1) == address(owner2));
-
 	}
-
+	
+	function test_approveAndTakeOwnership() public {
+		owner1.createRandomZombie("0");
+		owner1.approve(owner2, 0);
+		assert(zombieOwnership.balanceOf(owner1) == 1);
+		assert(zombieOwnership.ownerOf(0) == address(owner1));
+		
+		owner2.takeOwnership(0);
+		assert(zombieOwnership.balanceOf(owner1) == 0);
+		assert(zombieOwnership.balanceOf(owner2) == 1);
+		assert(zombieOwnership.ownerOf(0) == address(owner2));
+	}
+	
+	function testFail_approveAndWrongUserTakeOwnership() public {
+		owner1.createRandomZombie("0");
+		owner1.approve(owner2, 0);
+		ZombieOwner owner3 = new ZombieOwner(zombieOwnership);
+		
+		owner3.takeOwnership(0);// not allowed; should throw
+	}
 }
