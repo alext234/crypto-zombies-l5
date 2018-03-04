@@ -30,12 +30,16 @@ contract ZombieOwnershipTest is DSTest {
 	function test_balanceOf() public {
 		owner1.createRandomZombie("0");
 		assert(zombieOwnership.balanceOf(owner1) == 1);
-		
+		// TODO: should feedAndMultiply and then verifiy of the balance increases
+	}
+	
+	function test_ownerOf() public {
+		owner1.createRandomZombie("0");
 		owner2.createRandomZombie("1");
-		assert(zombieOwnership.balanceOf(owner2) == 1);
 		
 		assert(zombieOwnership.ownerOf(0) == address(owner1));
 		assert(zombieOwnership.ownerOf(1) == address(owner2));
+	
 	}
 
 }
