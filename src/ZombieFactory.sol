@@ -9,6 +9,8 @@ contract ZombieFactoryEvents {
 contract ZombieFactory is ZombieFactoryEvents, Ownable {
 
 	using SafeMath for uint256;
+	using SafeMath32 for uint32;
+	using SafeMath16 for uint16;
 
 	uint dnaDigits = 16;
 	uint dnaModulus = 10 ** dnaDigits;
