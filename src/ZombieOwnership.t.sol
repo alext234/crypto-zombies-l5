@@ -12,6 +12,10 @@ contract ZombieOwner {
 	function createRandomZombie(string _name) public {
 		zombieOwnership.createRandomZombie(_name);
 	}
+	
+	function transfer(address _to, uint256 _tokenId) public {
+		zombieOwnership.transfer(_to, _tokenId);
+	}
 }
 
 contract ZombieOwnershipTest is DSTest {
@@ -27,6 +31,8 @@ contract ZombieOwnershipTest is DSTest {
 		owner2 = new ZombieOwner(zombieOwnership);
 	}
 	
+	
+	// below mainly are the tests for the ERC721 interface
 	function test_balanceOf() public {
 		owner1.createRandomZombie("0");
 		assert(zombieOwnership.balanceOf(owner1) == 1);
@@ -40,6 +46,17 @@ contract ZombieOwnershipTest is DSTest {
 		assert(zombieOwnership.ownerOf(0) == address(owner1));
 		assert(zombieOwnership.ownerOf(1) == address(owner2));
 	
+	}
+	
+	function test_transfer() public {
+		owner1.createRandomZombie("0");
+		owner2.createRandomZombie("1");
+		owner1.transfer(owner2, 0);
+		assert(zombieOwnership.balanceOf(owner1) == 0);
+		assert(zombieOwnership.balanceOf(owner2) == 2);
+		assert(zombieOwnership.ownerOf(0) == address(owner2));
+		assert(zombieOwnership.ownerOf(1) == address(owner2));
+
 	}
 
 }
