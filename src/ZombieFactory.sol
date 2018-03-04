@@ -1,11 +1,14 @@
 pragma solidity ^0.4.19;
 import "./Ownable.sol";
+import "./SafeMath.sol";
 
 contract ZombieFactoryEvents {
     event NewZombie(uint zombieId, string name, uint dna);    
 }
 
 contract ZombieFactory is ZombieFactoryEvents, Ownable {
+
+	using SafeMath for uint256;
 
 	uint dnaDigits = 16;
 	uint dnaModulus = 10 ** dnaDigits;
