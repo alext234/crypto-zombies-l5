@@ -5,7 +5,8 @@
 # Overview
 
 This is from the tutorial at https://share.cryptozombies.io/en/lesson/5/share/AlexT?id=Z2l0aHVifDE2MjQ1MjI=
- 
+
+ERC721 Token has been implemented in this lesson.
 
 In addition, unit tests and testnet-based tests have been added.
 
@@ -35,7 +36,7 @@ make test
 ```
 
 
-### Testnet tests
+## Testnet tests
 
 
 On another terminal launch testnet with 2 accounts
@@ -50,3 +51,46 @@ Now run the test script
 ./testnet_script.sh
 ```
 
+# Deploy
+
+A contract has been deployed on the `Kovan` testnet at 
+https://kovan.etherscan.io/address/0xc4e157d452fbaa20767cfd051099a4ccb7a9a911
+
+## Create wallet on `Kovan` network
+
+- Go to https://www.myetherwallet.com/ and follow the steps to generate a wallet 
+(make sure to select `Network Kovan (infura.io)`).
+
+- Download the wallet key as a keystore file into a directory such as `~/keystore-directory`.
+
+- Have some `Kovan ETH` sent to the wallet address (one way is to request 
+  through https://gitter.im/kovan-testnet/faucet). This is used to pay for the transaction
+  cost.
+
+## Deploy with `dapp`
+
+Set environment variables to be used by `dapp`:
+```
+export ETH_KEYSTORE=~/keystore-directory/
+export ETH_FROM=<wallet-address>
+export ETH_RPC_URL=https://kovan.infura.io
+export ETH_GAS=4500000
+```
+
+Run `dapp deploy` command
+
+```
+dapp create ZombieOwnership
+
++ seth send --create out/ZombieOwnership.bin 'ZombieOwnership()'
+Ethereum account passphrase (not echoed): seth-send: Published transaction with 8692 bytes of calldata.
+seth-send: 0x56f0eeed31b83cb65db19b8e88d11ba53f2ff1349b22cfc6072be783224a7f7c
+seth-send: Waiting for transaction receipt.....
+seth-send: Transaction included in block 6172760.
+0xc4e157d452fbaa20767cfd051099a4ccb7a9a911
+```
+
+## Have the source code verified
+
+TODO
+ 
