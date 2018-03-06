@@ -56,6 +56,8 @@ Now run the test script
 A contract has been deployed on the `Kovan` testnet at 
 https://kovan.etherscan.io/address/0xc4e157d452fbaa20767cfd051099a4ccb7a9a911
 
+Below are the steps used:
+
 ## Create wallet on `Kovan` network
 
 - Go to https://www.myetherwallet.com/ and follow the steps to generate a wallet 
@@ -90,7 +92,21 @@ seth-send: Transaction included in block 6172760.
 0xc4e157d452fbaa20767cfd051099a4ccb7a9a911
 ```
 
+The deployed contract can be viewed on etherscan at https://kovan.etherscan.io/address/<contract-address>
+
 ## Have the source code verified
 
-TODO
- 
+Etherscan does not allow uploading multiple source files. Therefore the first 
+step is to have a *flattened* version of the contract, which means the contract 
+itself and all dependencies in one single file.
+
+- `solidity_flattener` can be used to flatten the contract
+
+Python3 is required.
+```
+(activate python3 virtualenv)
+pip install solidity_flattener
+solidity_flattener  src/ZombieOwnership.sol --output flattened.sol
+```
+
+- Upload the file `flattened.sol` to etherscan.io and it should be verified successfully.
