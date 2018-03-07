@@ -174,3 +174,18 @@ seth call $CONTRACT 'balanceOf(address)' <account2-address>
 
 All contract reads can be done interactively on the browser via etherscan site:
 https://kovan.etherscan.io/address/0xc4e157d452fbaa20767cfd051099a4ccb7a9a911#readContract
+
+
+### View contract event logs
+
+We need to set the `SETH_ABI` environment variable:
+
+```
+export SETH_ABI=$(seth --decorate-abi $(cat out/ZombieOwnership.abi))
+```
+
+View the event logs with `seth`:
+
+```
+seth events $CONTRACT
+```
