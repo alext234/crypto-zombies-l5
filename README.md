@@ -110,3 +110,7 @@ solidity_flattener  src/ZombieOwnership.sol --output flattened.sol
 ```
 
 - Upload the file `flattened.sol` to etherscan.io and it should be verified successfully.
+
+
+## Interact with the deployed contract
+TODO
