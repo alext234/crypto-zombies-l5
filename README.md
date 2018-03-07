@@ -113,4 +113,64 @@ solidity_flattener  src/ZombieOwnership.sol --output flattened.sol
 
 
 ## Interact with the deployed contract
-TODO
+
+Following are some examples of interaction with the contract
+`0xc4e157d452fbaa20767cfd051099a4ccb7a9a911` deployed on Kovan testnet.
+
+
+### With `seth`
+
+Having 2 accounts will be helpful
+try out the transfer of zombies based on the ERC721 interface.
+
+Some environment variables have to be set:
+
+```
+export SETH_CHAIN=kovan
+export ETH_GAS=450000
+export ETH_KEYSTORE=~/keystore-directory/
+
+export CONTRACT=0xc4e157D452FBaA20767cFD051099a4ccb7a9A911
+
+```
+
+Use `seth` from account1 to create a zombie:
+```
+export ETH_FROM=<account1-address>
+seth send $CONTRACT 'createRandomZombie(string)' 'a1'
+```
+
+Use `seth` from account2 to create a zombie:
+```
+export ETH_FROM=<account2-address>
+seth send $CONTRACT 'createRandomZombie(string)' 'a2'
+```
+
+Verify the owners of the 2 zombies:
+```
+seth call $CONTRACT 'ownerOf(uint256)' 0
+seth call $CONTRACT 'ownerOf(uint256)' 1
+```
+From account2, call `approve()` to transfer the ownership of its zombie to account1:
+
+```
+export ETH_FROM=<account2-address>
+seth send $CONTRACT 'approve(address,uint256)' <account1-address> 1
+```
+
+From account1, call `takeOwnership()` of the zombie:
+```
+export ETH_FROM=<account1-address>
+seth send $CONTRACT 'takeOwnership(uint256)'  1
+```
+
+Verify the number of zombies each account now has:
+```
+seth call $CONTRACT 'balanceOf(address)' <account1-address>
+seth call $CONTRACT 'balanceOf(address)' <account2-address>
+```
+
+### Read-only on etherscan
+
+All contract reads can be done interactively on the browser via etherscan site:
+https://kovan.etherscan.io/address/0xc4e157d452fbaa20767cfd051099a4ccb7a9a911#readContract
