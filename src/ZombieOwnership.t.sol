@@ -86,4 +86,14 @@ contract ZombieOwnershipTest is DSTest {
 		
 		owner3.takeOwnership(0);// not allowed; should throw
 	}
+
+	function testFail_approveAndRetakeOwnership() public {		
+		owner1.createRandomZombie("0");
+		
+		// owner1 approve ownership to owner2 but then 
+		// try to takeOwnership of the zombie afterwards
+		owner1.approve(owner2, 0);
+		owner1.takeOwnership(0);
+		
+	}
 }
