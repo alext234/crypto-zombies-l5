@@ -170,6 +170,24 @@ seth call $CONTRACT 'balanceOf(address)' <account1-address>
 seth call $CONTRACT 'balanceOf(address)' <account2-address>
 ```
 
+### Sign and publish separately
+
+With the `seth send` command used in the previous section, 
+we perform both signing the transaction and publishing to the blockchain. 
+In some cases, we would like to do them separately, for security purpose. 
+Signing can be performed on a offline machine and then publishing can be 
+done on another machine connected to the network.
+
+To create a signed transaction data, `seth mktx` can be used, 
+with similar syntax to `seth send`.
+```
+seth mktx $CONTRACT 'createRandomZombie(string)' 'a1'
+```
+It will output a signed transaction data to the console which can be
+published with `seth publish`.
+
+
+
 ### Read-only on etherscan
 
 All contract reads can be done interactively on the browser via etherscan site:
