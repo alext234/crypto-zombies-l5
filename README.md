@@ -53,157 +53,33 @@ Now run the test script
 
 # Deploy
 
-A contract has been deployed on the `Kovan` testnet at 
-https://kovan.etherscan.io/address/0xc4e157d452fbaa20767cfd051099a4ccb7a9a911
+A contract has been deployed on the `Rinkeby` testnet at 
+https://rinkeby.etherscan.io/address/0x72f01f9fbbafb61f363f57d57653e734cce0878d
 
 Below are the steps used:
 
-## Create wallet on `Kovan` network
+## Create wallet on `Rinkeby` network
 
 - Go to https://www.myetherwallet.com/ and follow the steps to generate a wallet 
-(make sure to select `Network Kovan (infura.io)`).
+(make sure to select `Network Rinkeby (infura.io)`).
 
 - Download the wallet key as a keystore file into a directory such as `~/keystore-directory`.
 
-- Have some `Kovan ETH` sent to the wallet address (one way is to request 
-  through https://gitter.im/kovan-testnet/faucet). This is used to pay for the transaction
-  cost.
+- Have some `ETH` sent to the wallet address through online faucet.
 
 ## Deploy with `dapp`
+
 
 Set environment variables to be used by `dapp`:
 ```
 export ETH_KEYSTORE=~/keystore-directory/
 export ETH_FROM=<wallet-address>
-export ETH_RPC_URL=https://kovan.infura.io
+export ETH_RPC_URL=https://rinkeby.infura.io
 export ETH_GAS=4500000
 ```
 
-Run `dapp deploy` command
+Deploy the `ZombieOwnership` contract:
 
 ```
 dapp create ZombieOwnership
-
-+ seth send --create out/ZombieOwnership.bin 'ZombieOwnership()'
-Ethereum account passphrase (not echoed): seth-send: Published transaction with 8692 bytes of calldata.
-seth-send: 0x56f0eeed31b83cb65db19b8e88d11ba53f2ff1349b22cfc6072be783224a7f7c
-seth-send: Waiting for transaction receipt.....
-seth-send: Transaction included in block 6172760.
-0xc4e157d452fbaa20767cfd051099a4ccb7a9a911
-```
-
-The deployed contract can be viewed on etherscan at https://kovan.etherscan.io/address/<contract-address>
-
-## Have the source code verified
-
-Etherscan does not allow uploading multiple source files. Therefore the first 
-step is to have a *flattened* version of the contract, which means the contract 
-itself and all dependencies in one single file.
-
-- `solidity_flattener` can be used to flatten the contract
-
-Python3 is required.
-```
-(activate python3 virtualenv)
-pip install solidity_flattener
-solidity_flattener  src/ZombieOwnership.sol --output flattened.sol
-```
-
-- Upload the file `flattened.sol` to etherscan.io and it should be verified successfully.
-
-
-## Interact with the deployed contract
-
-Following are some examples of interaction with the contract
-`0xc4e157d452fbaa20767cfd051099a4ccb7a9a911` deployed on Kovan testnet.
-
-
-### With `seth`
-
-Having 2 accounts will be helpful
-try out the transfer of zombies based on the ERC721 interface.
-
-Some environment variables have to be set:
-
-```
-export SETH_CHAIN=kovan
-export ETH_GAS=450000
-export ETH_KEYSTORE=~/keystore-directory/
-
-export CONTRACT=0xc4e157D452FBaA20767cFD051099a4ccb7a9A911
-
-```
-
-Use `seth` from account1 to create a zombie:
-```
-export ETH_FROM=<account1-address>
-seth send $CONTRACT 'createRandomZombie(string)' 'a1'
-```
-
-Use `seth` from account2 to create a zombie:
-```
-export ETH_FROM=<account2-address>
-seth send $CONTRACT 'createRandomZombie(string)' 'a2'
-```
-
-Verify the owners of the 2 zombies:
-```
-seth call $CONTRACT 'ownerOf(uint256)' 0
-seth call $CONTRACT 'ownerOf(uint256)' 1
-```
-From account2, call `approve()` to transfer the ownership of its zombie to account1:
-
-```
-export ETH_FROM=<account2-address>
-seth send $CONTRACT 'approve(address,uint256)' <account1-address> 1
-```
-
-From account1, call `takeOwnership()` of the zombie:
-```
-export ETH_FROM=<account1-address>
-seth send $CONTRACT 'takeOwnership(uint256)'  1
-```
-
-Verify the number of zombies each account now has:
-```
-seth call $CONTRACT 'balanceOf(address)' <account1-address>
-seth call $CONTRACT 'balanceOf(address)' <account2-address>
-```
-
-### Sign and publish separately
-
-With the `seth send` command used in the previous section, 
-we perform both signing the transaction and publishing to the blockchain. 
-In some cases, we would like to do them separately, for security purpose. 
-Signing can be performed on a offline machine and then publishing can be 
-done on another machine connected to the network.
-
-To create a signed transaction data, `seth mktx` can be used, 
-with similar syntax to `seth send`.
-```
-seth mktx $CONTRACT 'createRandomZombie(string)' 'a1'
-```
-It will output a signed transaction data to the console which can be
-published with `seth publish`.
-
-
-
-### Read-only on etherscan
-
-All contract reads can be done interactively on the browser via etherscan site:
-https://kovan.etherscan.io/address/0xc4e157d452fbaa20767cfd051099a4ccb7a9a911#readContract
-
-
-### View contract event logs
-
-We need to set the `SETH_ABI` environment variable:
-
-```
-export SETH_ABI=$(seth --decorate-abi $(cat out/ZombieOwnership.abi))
-```
-
-View the event logs with `seth`:
-
-```
-seth events $CONTRACT
 ```

@@ -1,6 +1,7 @@
 pragma solidity ^0.4.19;
 
 import "./ZombieFactory.sol";
+import "./UtilLib.sol";
 
 contract KittyInterface {
 	function getKitty(uint256 _id) external view returns (
@@ -44,7 +45,7 @@ contract ZombieFeeding is ZombieFactory {
 			public onlyOwnerOf(_zombieId) {
 			
 		Zombie storage myZombie = zombies[_zombieId];
-		_targetDna = _targetDna % dnaModulus;
+		_targetDna = _targetDna % UtilLib.dnaModulus();
 		uint newDna = (myZombie.dna + _targetDna) / 2;
 		if (keccak256(_species)==keccak256("kitty"))
 		{
