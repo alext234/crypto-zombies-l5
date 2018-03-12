@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/alext234/crypto-zombies-l5.svg?branch=master)](https://travis-ci.org/alext234/crypto-zombies-l5)
+[![Build Status](https://travis-ci.org/alext234/crypto-zombies-l5.svg?branch=refactor-into-library)](https://travis-ci.org/alext234/crypto-zombies-l5)
+
 
 # CryptoZombies, lesson 5
 
