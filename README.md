@@ -11,6 +11,11 @@ ERC721 Token has been implemented in this lesson.
 
 In addition, unit tests and testnet-based tests have been added.
 
+This is similar to the original code, except that some part of the code has been refactored into 
+a library `UtilLib`. Deploying the original contract `ZombieOwnership` requires 
+first deploying the library, linking the library address to the contract and then 
+finally deploying the contract itself.
+
 # Build 
 
 To build and test, `dapp` is required, similar to this repository https://github.com/alext234/dapp-tutorial.
