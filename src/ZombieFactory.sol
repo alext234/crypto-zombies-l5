@@ -33,7 +33,7 @@ contract ZombieFactory is ZombieFactoryEvents, Ownable {
 		uint id = zombies.push(Zombie(_name, _dna, 1, uint32(now + cooldownTime), 0, 0)) - 1;
 		zombieToOwner[id] = msg.sender;
 		ownerZombieCount[msg.sender] = ownerZombieCount[msg.sender].add(1);
-		NewZombie(id, _name, _dna);
+		emit NewZombie(id, _name, _dna);
 	}
 
 	function createRandomZombie(string _name) public {
