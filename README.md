@@ -55,7 +55,8 @@ Now run the test script
 # Deploy
 
 A contract has been deployed on the `Rinkeby` testnet at 
-https://rinkeby.etherscan.io/address/0x72f01f9fbbafb61f363f57d57653e734cce0878d
+https://rinkeby.etherscan.io/address/0xae53417c65f8d05879bc0ad3f52700cbd154411d
+
 
 Below are the steps used:
 
@@ -70,6 +71,13 @@ Below are the steps used:
 
 ## Deploy with `dapp`
 
+Make a clean build (this is necessary because after a `dapp test` it does replace the library 
+placeholders with the address of libraries deployed in the test environment).
+
+```
+dapp clean
+dapp build
+```
 
 Set environment variables to be used by `dapp`:
 ```
@@ -78,7 +86,27 @@ export ETH_FROM=<wallet-address>
 export ETH_RPC_URL=https://rinkeby.infura.io
 export ETH_GAS=4500000
 ```
+Deploy `UtilLib` and take note of its address
 
+```
+dapp create UtilLib
+
++ seth send --create out/UtilLib.bin 'UtilLib()'
+Ethereum account passphrase (not echoed): seth-send: Published transaction with 522 bytes of calldata.
+seth-send: 0x2588c62c489481c3dd22d309f9a870b0f7efd4bb225bc7a2cf8b7fdc93274fd5
+seth-send: Waiting for transaction receipt.....
+....
+seth-send: Transaction included in block 1924225.
+0xf6130d36fe4a2c91fafc8cd0900329b26ddb0c7c
+
+```
+
+Rebuild `ZombieOwnership` and link with `UtilLib` at the deployed address:
+
+```
+solc --overwrite --libraries 'src/UtilLib.sol:UtilLib:0xf6130d36fe4a2c91fafc8cd0900329b26ddb0c7c' --bin    src/ZombieOwnership.sol -o out/
+
+```
 Deploy the `ZombieOwnership` contract:
 
 ```
