@@ -5,7 +5,11 @@
 # echo on (print out each command as it is executed)
 set -x 
 
-ETH_FROM=$(seth rpc eth_accounts|sed 1p -n)
+
+dapp clean
+dapp build
+
+export ETH_FROM=$(seth rpc eth_accounts|sed 1p -n)
 
 ACCOUNT1=$(seth rpc eth_accounts|sed 1p -n)
 ACCOUNT2=$(seth rpc eth_accounts|sed 2p -n)
@@ -14,6 +18,13 @@ export ETH_KEYSTORE=~/.dapp/testnet/8545/keystore
 export ETH_GAS=3500000
 
 echo "" > empty-password.txt
+
+# deploy UtilLib
+utilLib=$(dapp create  UtilLib  -S empty-password.txt)
+
+#rebuild ZombieHelper and link in the address of the deployed UtilLib
+solc --overwrite --libraries "src/UtilLib.sol:UtilLib:$utilLib" --bin    src/ZombieHelper.sol -o out/
+
 zombieHelper=$(dapp create  ZombieHelper  -S empty-password.txt)
 
 txhash=$(seth --async --from $ACCOUNT1 --password empty-password.txt send $zombieHelper 'createRandomZombie(string)' 'a1')
